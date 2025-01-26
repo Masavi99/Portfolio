@@ -20,8 +20,8 @@ import { useAlertContext } from "../context/alertContext";
 const LandingSection = () => {
   const { isLoading, response, submit } = useSubmit();
   const { onOpen } = useAlertContext();
-  const [prevScrollPos, setPrevScrollPos] = useState(0);
-  const [isVisible, setIsVisible] = useState(true);
+  // const [prevScrollPos, setPrevScrollPos] = useState(0);
+  // const [isVisible, setIsVisible] = useState(true);
   // const headerRef = useRef(null);
 
 
@@ -36,8 +36,12 @@ const LandingSection = () => {
       console.log(values);
       await submit("/api/contact", values);
       if (response) {
+
         onOpen(response.type, response.message);
+        console.log("Response type:", response.type);
+
         if (response.type === "success") {
+          console.log("Resetting Form");
           resetForm();
         }
 
@@ -54,11 +58,10 @@ const LandingSection = () => {
   });
 
   useEffect(() => {
-    if (response) {
+    if (response && !isLoading) {
       onOpen(response.type, response.message);
     }
-  }, [response, onOpen]);
-
+  }, [response]);
   return (
     <FullScreenSection
       isDarkBackground

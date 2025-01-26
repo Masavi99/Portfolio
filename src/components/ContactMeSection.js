@@ -22,23 +22,8 @@ const LandingSection = () => {
   const { onOpen } = useAlertContext();
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
-  const headerRef = useRef(null);
+  // const headerRef = useRef(null);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollPos = window.pageYOffset;
-      const isScrollingUp = prevScrollPos > currentScrollPos;
-
-      setIsVisible(isScrollingUp);
-      setPrevScrollPos(currentScrollPos);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [prevScrollPos]);
 
   const formik = useFormik({
     initialValues: {
@@ -48,12 +33,14 @@ const LandingSection = () => {
       comment: "",
     },
     onSubmit: async (values, { resetForm }) => {
+      console.log(values);
       await submit("/api/contact", values);
       if (response) {
         onOpen(response.type, response.message);
         if (response.type === "success") {
           resetForm();
         }
+
       }
     },
     validationSchema: Yup.object({
@@ -79,20 +66,12 @@ const LandingSection = () => {
       py={16}
       spacing={8}
     >
-      <Box
-        ref={headerRef}
-        position="fixed"
-        top={0}
-        width="100%"
-        backgroundColor="#512DA8"
-        zIndex={10}
-        transform={isVisible ? "translateY(0)" : "translateY(-200px)"}
-        transition="transform 0.3s ease-in-out"
-      >
-        <Heading as="h1" p={4} color="white">
-          Contact me
-        </Heading>
-      </Box>
+
+      {/* <Heading as="h1" p={4} color="white">
+        Contact me
+      </Heading> */}
+
+
       <VStack w="1024px" p={32} alignItems="flex-start" mt="100px">
         <Heading as="h1" id="contactme-section">
           Contact me
